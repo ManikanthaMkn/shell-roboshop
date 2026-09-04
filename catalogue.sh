@@ -52,7 +52,7 @@ else
 fi
 
 mkdir -p /app
-Validate $? "Creating app directory"
+VALIDATE $? "Creating app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading Catalogue Files"
