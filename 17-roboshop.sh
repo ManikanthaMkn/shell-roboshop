@@ -2,7 +2,7 @@
 
 AMI_ID="ami-0220d79f3f480ecf5" #Replace with your AMI ID
 SG_ID="sg-052c76aba2d33b868" #Replace with your SG ID
-INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "forntend")
+INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "forntend") #Number of instances with their names.
 ZONE_ID="Z051120136E8EIBY61NGW" #Replace with your ZONE ID
 DOMAIN_NAME="arohvya.online" #Replace with your DOMAIN NAME
 
