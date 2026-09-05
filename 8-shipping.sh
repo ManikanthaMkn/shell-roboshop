@@ -72,13 +72,14 @@ VALIDATE $? "Copying Shipping service"
 systemctl daemon-reload
 systemctl enable shipping 
 systemctl start shipping
-VALIDATE $? "Reloading Enabling Starting the catalogue"
+VALIDATE $? "Reloading Enabling Starting the Shipping"
 
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL"
 
 mysql -h mysql.arohvya.online -u root -pMYSQL_ROOT_PASSWORD -e 'use cities'
-if [ $? -ne 0]
+
+if [ $? -ne 0 ]
 then
     mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
     mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
@@ -87,6 +88,9 @@ then
 else
     echo -e "Data is already loaded into MySQL ... $Y Skipping $N"
 fi
+
+systemctl restart shipping
+VALIDATE $? "Restart the Shipping"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
