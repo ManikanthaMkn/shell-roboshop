@@ -77,10 +77,16 @@ VALIDATE $? "Reloading Enabling Starting the catalogue"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL"
 
-mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
-mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
-mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
-VALIDATE $? "Loading data into Database"
+mysql -h mysql.arohvya.online -u root -pRoboShop@1 -e 'use cities'
+if [ $? -ne 0]
+then
+    mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+    mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
+    mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
+    VALIDATE $? "Loading data into Database"
+else
+    echo -e "Data is already loaded into MySQL ... $Y Skipping $N"
+fi
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
