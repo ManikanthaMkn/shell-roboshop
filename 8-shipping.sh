@@ -70,8 +70,8 @@ cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>>$LOG_FIL
 VALIDATE $? "Copying Shipping service"
 
 systemctl daemon-reload
-systemctl enable catalogue 
-systemctl start catalogue
+systemctl enable shipping 
+systemctl start shipping
 VALIDATE $? "Reloading Enabling Starting the catalogue"
 
 dnf install mysql -y &>>$LOG_FILE
