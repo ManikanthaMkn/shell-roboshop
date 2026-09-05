@@ -23,6 +23,9 @@ else
     echo "You are running with root access" | tee -a $LOG_FILE
 fi #IF I am not root → show error and stop. Otherwise → continue.
 
+echo "Please enter the root passowrd to srtup"
+read -s MYSQL_ROOT_PASSWORD
+
 #Validate the function inputs: exit status and the command used for installation.
 VALIDATE(){
     if [ $1 -eq 0 ]
@@ -34,7 +37,17 @@ VALIDATE(){
     fi
 }
 
+dnf install mysql-server -y &>>$LOG_FILE
+VALIDATE $? "Installing MySQL Server"
 
+systemctl enable mysqld &>>$LOG_FILE
+VALIDATE $? "Enabling MySQL"
+
+systemctl start mysqld &>>$LOG_FILE
+VALIDATE $? "Starting MySQL"
+
+mysql_secure_installation --set-root-pass $MYSQL_ROOT_PASSWORD
+VALIDATE $? "Stetting-up root user password"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
