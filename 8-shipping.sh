@@ -77,7 +77,7 @@ VALIDATE $? "Reloading Enabling Starting the Shipping"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL"
 
-mysql -h mysql.arohvya.online -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
+mysql -h mysql.arohvya.online -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE  #While writing this script I forgot to mention "$" in front of MYSQL_ROOT_PASSWORD after checking lot of things, then after I become calmly I checked each line and I found this.
 if [ $? -ne 0 ]
 then
     mysql -h mysql.arohvya.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
