@@ -4,7 +4,7 @@ Description=Shipping Service
 [Service]
 User=roboshop
 // highlight-start
-Environment=CART_ENDPOINT=cart.arohvya.onlie:8080
+Environment=CART_ENDPOINT=cart.arohvya.online:8080
 Environment=DB_HOST=mysql.arohvya.online
 // highlight-end
 ExecStart=/bin/java -jar /app/shipping.jar

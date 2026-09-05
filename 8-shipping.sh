@@ -23,8 +23,8 @@ else
     echo "You are running with root access" | tee -a $LOG_FILE
 fi #IF I am not root → show error and stop. Otherwise → continue.
 
-# echo "Please enter the root passowrd to srtup"
-# read -s MYSQL_ROOT_PASSWORD
+echo "Please enter the root passowrd to srtup"
+read -s MYSQL_ROOT_PASSWORD
 
 #Validate the function inputs: exit status and the command used for installation.
 VALIDATE(){
@@ -77,9 +77,9 @@ VALIDATE $? "Reloading Enabling Starting the catalogue"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL"
 
-mysql -h mysql.arohvya.online -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
-mysql -h mysql.arohvya.online -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE
-mysql -h mysql.arohvya.online -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE
+mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
 VALIDATE $? "Loading data into Database"
 
 END_TIME=$(date +%s)
