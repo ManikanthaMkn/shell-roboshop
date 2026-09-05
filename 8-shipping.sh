@@ -77,7 +77,7 @@ VALIDATE $? "Reloading Enabling Starting the catalogue"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL"
 
-mysql -h mysql.arohvya.online -u root -pRoboShop@1 -e 'use cities'
+mysql -h mysql.arohvya.online -u root -pMYSQL_ROOT_PASSWORD -e 'use cities'
 if [ $? -ne 0]
 then
     mysql -h mysql.arohvya.online -uroot -pMYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
