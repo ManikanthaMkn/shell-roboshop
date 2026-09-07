@@ -23,7 +23,7 @@ else
     echo "You are running with root access" | tee -a $LOG_FILE
 fi #IF I am not root → show error and stop. Otherwise → continue.
 
-echo "Please enter the RabbitMQ passowrd to srtup"
+echo "Please enter the RabbitMQ passowrd to startup" #The password should be "roboshop123"
 read -s RABBITMQ_PASSWD
 
 #Validate the function inputs: exit status and the command used for installation.
