@@ -1,4 +1,4 @@
-#!/bin/bash/
+#!/bin/bash
 
 START_TIME=$(date +%s)
 USERID=$(id -u)
@@ -12,65 +12,65 @@ LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
-echo "Script Started Executing at:: $(date)" | tee -a $LOG_FILE
+echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
-#Check whether the user has root privileges or not
+# check the user has root priveleges or not
 if [ $USERID -ne 0 ]
 then
     echo -e "$R ERROR:: Please run this script with root access $N" | tee -a $LOG_FILE
-    exit 1
+    exit 1 #give other than 0 upto 127
 else
     echo "You are running with root access" | tee -a $LOG_FILE
-fi #IF I am not root → show error and stop. Otherwise → continue.
+fi
 
-echo "Please enter the RabbitMQ passowrd to srtup"
-read -s RABBITMQ_PASSWD
-
-#Validate the function inputs: exit status and the command used for installation.
+# validate functions takes input as exit status, what command they tried to install
 VALIDATE(){
     if [ $1 -eq 0 ]
-    then 
+    then
         echo -e "$2 is ... $G SUCCESS $N" | tee -a $LOG_FILE
-    else 
+    else
         echo -e "$2 is ... $R FAILURE $N" | tee -a $LOG_FILE
         exit 1
     fi
 }
 
 dnf install python3 gcc python3-devel -y &>>$LOG_FILE
-VALIDATE $? "Installing Python"
+VALIDATE $? "Install Python3 packages"
 
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-    VALIDATE $? "Creating System User"
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    VALIDATE $? "Creating roboshop system user"
 else
-    echo -e "System user Roboshop already exist"
+    echo -e "System user roboshop already created ... $Y SKIPPING $N"
 fi
 
-mkdir -p /app &>>$LOG_FILE
+mkdir -p /app 
 VALIDATE $? "Creating app directory"
 
-curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOG_FILE
-VALIDATE $? "Downloading Payment Files"
+curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOG_FILE
+VALIDATE $? "Downloading payment"
 
 rm -rf /app/*
 cd /app 
 unzip /tmp/payment.zip &>>$LOG_FILE
-VALIDATE $? "Unzipping the Payment"
+VALIDATE $? "unzipping payment"
+
+pip3 install -r requirements.txt &>>$LOG_FILE
+VALIDATE $? "Installing dependencies"
 
 cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
-VALIDATE $? "Copying Payment Service"
+VALIDATE $? "Copying payment service"
 
 systemctl daemon-reload &>>$LOG_FILE
-VALIDATE $? "Reloading"
+VALIDATE $? "Daemon Reload"
 
 systemctl enable payment &>>$LOG_FILE
-VALIDATE $? "Enable Payment"
+VALIDATE $? "Enable payment"
 
 systemctl start payment &>>$LOG_FILE
-VALIDATE $? "Starting Payment"
+VALIDATE $? "Starting payment"
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME ))
