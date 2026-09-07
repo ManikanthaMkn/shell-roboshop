@@ -37,7 +37,7 @@ VALIDATE(){
     fi
 }
 
-dnf install python3 gcc python3-devel -y
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
 VALIDATE $? "Installing Python"
 
 id roboshop
@@ -49,27 +49,27 @@ else
     echo -e "System user Roboshop already exist"
 fi
 
-mkdir /app
+mkdir /app &>>$LOG_FILE
 VALIDATE $? "Creating app directory"
 
-curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading Payment Files"
 
 rm -rf /app/*
 cd /app 
-unzip /tmp/payment.zip
+unzip /tmp/payment.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping the Payment"
 
-cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
 VALIDATE $? "Copying Payment Service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Reloading"
 
-systemctl enable payment
+systemctl enable payment &>>$LOG_FILE
 VALIDATE $? "Enable Payment"
 
-systemctl start payment
+systemctl start payment &>>$LOG_FILE
 VALIDATE $? "Starting Payment"
 
 END_TIME=$(date +%s)
